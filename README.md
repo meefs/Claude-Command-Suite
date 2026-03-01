@@ -1,17 +1,19 @@
 # Claude Command Suite
 
-![Total Commands](https://img.shields.io/badge/Commands-148-brightgreen?style=for-the-badge)
+![Total Commands](https://img.shields.io/badge/Commands-216-brightgreen?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-12-blue?style=for-the-badge)
 ![AI Agents](https://img.shields.io/badge/AI_Agents-54-red?style=for-the-badge)
 ![GitHub Release](https://img.shields.io/github/v/release/qdhenry/Claude-Command-Suite?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-purple?style=for-the-badge)
 
 > A comprehensive development toolkit designed following [Anthropic's Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices) for AI-assisted software development.
 
-**Claude Command Suite** is a development toolkit providing 148+ slash commands, 54 AI agents, Claude Code Skills, and automated workflows for software engineering tasks. The suite covers code review, testing, deployment, business scenario modeling, and GitHub-Linear synchronization through structured, repeatable workflows.
+**Claude Command Suite** is a development toolkit providing 216+ slash commands, 12 Claude Code Skills, 54 AI agents, and automated workflows for software engineering tasks. The suite covers code review, testing, deployment, media processing, WebMCP integration, business scenario modeling, and GitHub-Linear synchronization through structured, repeatable workflows.
 
 - **Slash Commands**: Namespace-organized commands (`/dev:code-review`, `/test:generate-test-cases`, `/deploy:prepare-release`) for development workflows
 - **AI Agents**: Specialized agents for security auditing, test coverage analysis, and cross-platform synchronization
-- **Claude Code Skills**: Model-invoked capabilities for recurring workflows including Linear task management and Cloudflare infrastructure deployment
+- **Claude Code Skills**: 12 model-invoked capabilities for recurring workflows including Linear task management, WebMCP integration, media processing, and Cloudflare deployment
+- **Standalone Commands**: Purpose-built commands for project cleanup, spec writing, file watching, WebMCP, and media processing
 - **Automated Workflows**: Pre-configured sequences for feature implementation and production deployment
 - **Scenario Simulators**: Decision-making tools for business modeling, system behavior analysis, and architectural evaluation
 - **Task Orchestration**: Task management system with Git integration and context preservation
@@ -41,7 +43,7 @@ Specialized AI agents handle complex development tasks through focused tool acce
 
 <div align="center">
 
-[![Skills Available](https://img.shields.io/badge/Skills-2_Available-9b59b6?style=for-the-badge&labelColor=2c3e50)](.claude/skills/)
+[![Skills Available](https://img.shields.io/badge/Skills-12_Available-9b59b6?style=for-the-badge&labelColor=2c3e50)](.claude/skills/)
 [![Documentation](https://img.shields.io/badge/Documentation-Skills_Guide-3498db?style=for-the-badge&labelColor=2c3e50)](.claude/commands/skills/README.md)
 
 </div>
@@ -74,6 +76,68 @@ Claude Code Skills extend the suite with model-invoked capabilities that complem
 - DNS and routing configuration
 - Requirements: Bun runtime, CLOUDFLARE_API_KEY
 
+**[webmcp](.claude/skills/webmcp/)** - WebMCP browser-native AI tool integration
+
+- Imperative JavaScript API and declarative HTML form annotation
+- Tool setup, debugging, auditing, and testing workflows
+- Chrome 146+ with WebMCP flag enabled
+- Model Context Tool Inspector integration
+
+**[bigcommerce-api](.claude/skills/bigcommerce-api/)** - BigCommerce API expert
+
+- REST V2/V3, GraphQL Storefront, webhooks, and OAuth
+- Headless storefront development with Next.js/Catalyst
+- Catalog, Orders, Customers, and Payments API workflows
+- Multi-storefront channel awareness and rate limit management
+
+**[audit-env-variables](.claude/skills/audit-env-variables/)** - Environment variable security audit
+
+- Scans `.env*` files and cross-references usage across JS/TS codebases
+- Detects unused variables, dynamic access patterns, and known services
+- Optional cleanup mode with backup branches and regression prevention
+
+**[remove-dead-code](.claude/skills/remove-dead-code/)** - Multi-agent dead code removal
+
+- Parallel scout agents analyze unused exports, orphaned files, dead imports
+- Automatic backup branch creation before any removal
+- Post-removal validation with TypeScript checking, build, and test suite
+
+**[elevenlabs-transcribe](.claude/skills/elevenlabs-transcribe/)** - Audio/video transcription
+
+- ElevenLabs Scribe v2 API with speaker diarization (up to 32 speakers)
+- Audio event tagging, language detection, and key-term biasing
+- Requirements: ELEVENLABS_API_KEY, `uv` runtime
+
+**[extract-video-frames](.claude/skills/extract-video-frames/)** - Video frame extraction
+
+- PNG frame extraction at configurable intervals via ffmpeg
+- Aligned audio segments and full audio track export
+- JSON manifest generation for agent handoff pipelines
+
+**[file-watcher](.claude/skills/file-watcher/)** - Chokidar-based file change watcher
+
+- Monitors files/directories and triggers `claude -p` on changes
+- Glob filtering, debounce control, and `{{file}}` placeholder support
+- Use cases: auto code review, type checking, test generation
+
+**[gsap-animation](.claude/skills/gsap-animation/)** - GSAP animation reference
+
+- Complete API reference covering tweens, timelines, easing, stagger, and plugins
+- ScrollTrigger, Flip, SplitText, Draggable deep references
+- React integration with `useGSAP()` hook and SSR/Next.js patterns
+
+**[setup-agent-tail](.claude/skills/setup-agent-tail/)** - Agent-tail log aggregation setup
+
+- Auto-detects framework (Vite, Next.js, monorepo, Node CLI)
+- Browser console capture and configurable log filtering
+- Package manager detection and script wrapping
+
+**[setup-portless](.claude/skills/setup-portless/)** - Portless named .localhost URLs
+
+- Replaces port numbers with stable `name.localhost` URLs
+- Monorepo subdomain naming patterns
+- Requirements: Node.js 20+, macOS or Linux
+
 ### Skills Builder Framework
 
 Structured workflow for creating custom skills:
@@ -89,6 +153,9 @@ Structured workflow for creating custom skills:
 ```
 "What do I need to work on today?"  # Activates linear-todo-sync
 "Deploy a cloudflare worker"        # Activates cloudflare-manager
+"Set up WebMCP in this project"     # Activates webmcp
+"Transcribe this audio file"        # Activates elevenlabs-transcribe
+"Find and remove dead code"         # Activates remove-dead-code
 ```
 
 **Creating skills:**
@@ -144,12 +211,14 @@ claude code
 /dev:code-review           # Review your entire codebase
 /project:create-feature    # Build a new feature
 /security:security-audit   # Check for security issues
+/dev:cleanup-vibes         # Clean up a vibecoded project
+/webmcp:setup              # Set up WebMCP integration
 ```
 
 <a id="available-commands"></a>
 ## Available Commands
 
-148 commands organized by namespace for software development workflows.
+216 commands organized by namespace for software development workflows.
 
 54 AI agents available for complex task automation. [AI Agents Documentation](.claude/agents/README.md)
 
@@ -159,7 +228,8 @@ claude code
 |:--------------------:|:--------------------:|:--------------:|:----------------:|:------------:|
 | [🚀 Project](#-project---project-management) | [🧪 Test](#-test---testing-suite) | [📦 Deploy](#-deploy---deployment--release) | [👥 Team](#-team---team-collaboration) | [🎯 Simulation](#-simulation---ai-reality-simulators) |
 | [💻 Dev](#-dev---development-tools) | [🔒 Security](#-security---security--compliance) | [📚 Docs](#-docs---documentation-generation) | [🔄 Sync](#-sync---integration--synchronization) | [📋 Orchestration](#-orchestration---task-orchestration) |
-| [🔧 Setup](#-setup---configuration--setup) | [⚡ Performance](#-performance---performance-optimization) |  |  | [🧠 WFGY](#-wfgy---semantic-reasoning--memory) |
+| [🔧 Setup](#-setup---configuration--setup) | [⚡ Performance](#-performance---performance-optimization) | [🌐 WebMCP](#-webmcp---webmcp-integration) | [💬 Session](#-session---session-management) | [🧠 WFGY](#-wfgy---semantic-reasoning--memory) |
+| [🦀 Rust](#-rust---rust--tauri-development) | | [🎬 Media](#-media---media-processing) | | |
 
 <a id="command-namespaces"></a>
 ## Command Namespaces
@@ -179,6 +249,8 @@ Project initialization, configuration, and management. Commands for project crea
 - [`/project:pac-create-ticket`](.claude/commands/project/pac-create-ticket.md) - Create new PAC ticket within an epic
 - [`/project:pac-validate`](.claude/commands/project/pac-validate.md) - Validate PAC structure for specification compliance
 - [`/project:pac-update-status`](.claude/commands/project/pac-update-status.md) - Update PAC ticket status and track progress
+- [`/project:todo-branch`](.claude/commands/project/todo-branch.md) - Create feature branches from todo items
+- [`/project:todo-worktree`](.claude/commands/project/todo-worktree.md) - Create git worktrees from todo items
 
 ### `/dev:*` - Development Tools
 Development utilities including code review, debugging, refactoring, and analysis modes.
@@ -197,6 +269,16 @@ Development utilities including code review, debugging, refactoring, and analysi
 - [`/dev:code-to-task`](.claude/commands/dev/code-to-task.md) - Convert code analysis to Linear tasks
 - [`/dev:code-permutation-tester`](.claude/commands/dev/code-permutation-tester.md) - Test multiple code variations through simulation
 - [`/dev:architecture-scenario-explorer`](.claude/commands/dev/architecture-scenario-explorer.md) - Explore architectural decisions through scenario analysis
+- [`/dev:incremental-feature-build`](.claude/commands/dev/incremental-feature-build.md) - Build features incrementally with validation gates
+- [`/dev:parallel-feature-build`](.claude/commands/dev/parallel-feature-build.md) - Build features using parallel agent execution
+- [`/dev:cloudflare-worker`](.claude/commands/dev/cloudflare-worker.md) - Generate and deploy Cloudflare Workers
+- [`/dev:generate-linear-worklog`](.claude/commands/dev/generate-linear-worklog.md) - Generate work logs from Linear task history
+- [`/dev:rule2hook`](.claude/commands/dev/rule2hook.md) - Convert CLAUDE.md rules to Claude Code hooks
+- [`/dev:cleanup-vibes`](.claude/commands/dev/cleanup-vibes.md) - Transform vibecoded projects into structured, deployment-ready codebases
+- [`/dev:remove-dead-code`](.claude/commands/dev/remove-dead-code.md) - Multi-agent dead code scanning, removal, and validation with backup branches
+- [`/dev:create-ui-component`](.claude/commands/dev/create-ui-component.md) - Create UI components with design system compliance and Storybook stories
+- [`/dev:watch`](.claude/commands/dev/watch.md) - File watcher that triggers Claude on changes with glob filtering and debounce
+- [`/dev:xml-prompt-formatter`](.claude/commands/dev/xml-prompt-formatter.md) - Reformat prompts using structured XML tags for semantic clarity
 
 ### `/test:*` - Testing Suite
 Testing tools for unit tests, integration tests, E2E tests, coverage analysis, mutation testing, and visual regression testing.
@@ -286,6 +368,8 @@ Setup commands for development environments, linting, formatting, monitoring, da
 - [`/setup:design-rest-api`](.claude/commands/setup/design-rest-api.md) - Design RESTful API architecture
 - [`/setup:implement-graphql-api`](.claude/commands/setup/implement-graphql-api.md) - Implement GraphQL API endpoints
 - [`/setup:setup-rate-limiting`](.claude/commands/setup/setup-rate-limiting.md) - Implement API rate limiting
+- [`/setup:agent-tail`](.claude/commands/setup/agent-tail.md) - Configure agent-tail log aggregation with framework auto-detection
+- [`/setup:portless`](.claude/commands/setup/portless.md) - Set up Portless for named `.localhost` URLs replacing port numbers
 
 ### `/team:*` - Team Collaboration
 Team workflow tools including standup reports, sprint planning, retrospectives, workload balancing, and knowledge management.
@@ -319,6 +403,54 @@ Simulation and modeling tools for decision analysis through scenario exploration
 
 **📖 [Comprehensive Examples Guide](/.claude/commands/simulation/SIMULATION_EXAMPLES.md)** - Real-world usage patterns, argument templates, and command synergy workflows.
 
+### `/rust:*` - Rust & Tauri Development
+Rust codebase auditing, refactoring, and Tauri desktop application development tools.
+
+**Architecture Auditing:**
+- [`/rust:audit-clean-arch`](.claude/commands/rust/audit-clean-arch.md) - Audit Rust codebase against Clean Architecture principles
+- [`/rust:audit-dependencies`](.claude/commands/rust/audit-dependencies.md) - Audit dependency direction violations
+- [`/rust:audit-layer-boundaries`](.claude/commands/rust/audit-layer-boundaries.md) - Verify architectural layer boundaries
+- [`/rust:audit-ports-adapters`](.claude/commands/rust/audit-ports-adapters.md) - Audit Ports & Adapters pattern compliance
+- [`/rust:suggest-refactor`](.claude/commands/rust/suggest-refactor.md) - Generate refactoring suggestions for Rust code
+- [`/rust:setup-tauri-mcp`](.claude/commands/rust/setup-tauri-mcp.md) - Setup Tauri MCP integration
+
+**Tauri Desktop App** (`/rust:tauri:*`):
+- [`/rust:tauri:launch`](.claude/commands/rust/tauri/launch.md) - Launch Tauri application
+- [`/rust:tauri:health`](.claude/commands/rust/tauri/health.md) - Check Tauri app health
+- [`/rust:tauri:inspect`](.claude/commands/rust/tauri/inspect.md) - Inspect Tauri app state
+- [`/rust:tauri:screenshot`](.claude/commands/rust/tauri/screenshot.md) - Capture Tauri app screenshots
+- [`/rust:tauri:call-ipc`](.claude/commands/rust/tauri/call-ipc.md) - Call Tauri IPC commands
+- [`/rust:tauri:list-commands`](.claude/commands/rust/tauri/list-commands.md) - List available IPC commands
+- [`/rust:tauri:exec-js`](.claude/commands/rust/tauri/exec-js.md) - Execute JavaScript in Tauri webview
+- [`/rust:tauri:click`](.claude/commands/rust/tauri/click.md) - Click elements in Tauri UI
+- [`/rust:tauri:type`](.claude/commands/rust/tauri/type.md) - Type text into Tauri UI elements
+- [`/rust:tauri:window`](.claude/commands/rust/tauri/window.md) - Manage Tauri windows
+- [`/rust:tauri:devtools`](.claude/commands/rust/tauri/devtools.md) - Open Tauri DevTools
+- [`/rust:tauri:logs`](.claude/commands/rust/tauri/logs.md) - View Tauri application logs
+- [`/rust:tauri:resources`](.claude/commands/rust/tauri/resources.md) - Manage Tauri app resources
+- [`/rust:tauri:stop`](.claude/commands/rust/tauri/stop.md) - Stop running Tauri application
+
+### `/webmcp:*` - WebMCP Integration
+Browser-native AI tool integration using Chrome's WebMCP standard. Setup, tool creation, debugging, and auditing workflows.
+
+- [`/webmcp:webmcp`](.claude/commands/webmcp/webmcp.md) - Implement WebMCP in web projects (setup, add tools, debug, audit, test)
+- [`/webmcp:setup`](.claude/commands/webmcp/setup.md) - Set up WebMCP in a project from scratch
+- [`/webmcp:add-tool`](.claude/commands/webmcp/add-tool.md) - Add a new WebMCP tool to a project
+- [`/webmcp:debug`](.claude/commands/webmcp/debug.md) - Debug WebMCP tools that aren't working correctly
+- [`/webmcp:audit`](.claude/commands/webmcp/audit.md) - Audit existing WebMCP implementation for best practices
+
+### `/media:*` - Media Processing
+Audio and video processing tools for frame extraction, transcription, and agent pipeline handoff.
+
+- [`/media:extract-video-frames`](.claude/commands/media/extract-video-frames.md) - Extract PNG frames and audio segments from video files at configurable intervals
+- [`/media:elevenlabs-transcribe`](.claude/commands/media/elevenlabs-transcribe.md) - Transcribe audio/video files using ElevenLabs Scribe v2 with speaker diarization
+
+### `/session:*` - Session Management
+Context handoff and session continuity tools for preserving work across Claude sessions.
+
+- [`/session:handoff`](.claude/commands/session/handoff.md) - Create comprehensive handoff documents capturing work context, decisions, and next steps
+- [`/session:handoff-continue`](.claude/commands/session/handoff-continue.md) - Create handoff document and automatically spawn a new Claude session in a Zellij pane
+
 *Development tools `/dev:prime`, `/dev:all-tools` contributed by IndyDevDan (YouTube: https://www.youtube.com/@indydevdan) / DislerH (GitHub: https://github.com/disler)*
 
 ### `/orchestration:*` - Task Orchestration
@@ -329,6 +461,7 @@ Task management and execution system for organizing complex projects into tracka
 - [`/orchestration:resume`](.claude/commands/orchestration/resume.md) - Continue where you left off with full context restoration
 - [`/orchestration:move`](.claude/commands/orchestration/move.md) - Update task status as work progresses
 - [`/orchestration:commit`](.claude/commands/orchestration/commit.md) - Create professional Git commits linked to tasks
+- [`/orchestration:log`](.claude/commands/orchestration/log.md) - View task activity and change history
 - [`/orchestration:find`](.claude/commands/orchestration/find.md) - Search and discover tasks across projects
 - [`/orchestration:report`](.claude/commands/orchestration/report.md) - Generate standup reports and executive summaries
 - [`/orchestration:sync`](.claude/commands/orchestration/sync.md) - Synchronize task status with Git commits
@@ -374,6 +507,7 @@ Semantic reasoning system based on the [WFGY project](https://github.com/onestar
 - [`/memory:recall`](.claude/commands/memory/memory-recall.md) - Search and retrieve memories
 - [`/memory:compress`](.claude/commands/memory/memory-compress.md) - Optimize tree size
 - [`/memory:merge`](.claude/commands/memory/memory-merge.md) - Combine related nodes
+- [`/memory:prune`](.claude/commands/memory/memory-prune.md) - Remove stale or irrelevant memories
 
 **📚 [WFGY Documentation](.claude/commands/wfgy/README.md)** - Mathematical foundations, performance benchmarks, and comprehensive usage guide for semantic reasoning.
 
@@ -438,6 +572,32 @@ Commands use the format `/namespace:command-name`. Each command executes a struc
 /security:dependency-audit               # Check for outdated dependencies
 /performance:performance-audit              # Identify bottlenecks
 /dev:refactor-code legacy-module    # Improve problematic areas
+```
+
+**Project Cleanup & Spec Writing:**
+```bash
+/dev:cleanup-vibes                          # Transform vibecoded project into structured codebase
+/spec-workflow:quick-spec auth system       # Rapid spec with opinionated recommendations
+/dev:remove-dead-code scan                  # Find dead code across the project
+```
+
+**Media Processing Pipeline:**
+```bash
+/media:extract-video-frames demo.mp4 2      # Extract frames every 2 seconds
+/media:elevenlabs-transcribe interview.mp3   # Transcribe with speaker diarization
+```
+
+**WebMCP Integration:**
+```bash
+/webmcp:setup                               # Set up WebMCP from scratch
+/webmcp:add-tool "search products"          # Add a new tool
+/webmcp:audit                               # Audit for best practices
+```
+
+**Session Handoff:**
+```bash
+/session:handoff                            # Create handoff document for context transfer
+/session:handoff-continue                   # Handoff + spawn new Claude session in Zellij
 ```
 
 **Strategic Decision Making:**
