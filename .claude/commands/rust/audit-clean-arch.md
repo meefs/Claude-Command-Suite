@@ -15,6 +15,7 @@ Audit the Rust codebase for clean architecture compliance: **$ARGUMENTS**
 
 > **Note:** `$ARGUMENTS` can specify a path, specific concerns, or be empty for full audit.
 > Examples:
+>
 > - `/rust:audit-clean-arch` - Full audit of current directory
 > - `/rust:audit-clean-arch src/` - Audit specific path
 > - `/rust:audit-clean-arch --focus dependencies` - Focus on dependency violations
@@ -73,14 +74,15 @@ done
 
 Map discovered directories to architectural layers:
 
-| Layer | Common Directory Names |
-|-------|----------------------|
-| **Domain** | `domain/`, `entities/`, `models/`, `core/domain/` |
-| **Application** | `application/`, `use_cases/`, `usecases/`, `services/` (business), `core/` |
-| **Adapters** | `adapters/`, `api/`, `handlers/`, `controllers/`, `repositories/`, `persistence/`, `http/`, `grpc/` |
-| **Infrastructure** | `infrastructure/`, `infra/`, `config/`, `db/`, `main.rs` setup code |
+| Layer              | Common Directory Names                                                                              |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| **Domain**         | `domain/`, `entities/`, `models/`, `core/domain/`                                                   |
+| **Application**    | `application/`, `use_cases/`, `usecases/`, `services/` (business), `core/`                          |
+| **Adapters**       | `adapters/`, `api/`, `handlers/`, `controllers/`, `repositories/`, `persistence/`, `http/`, `grpc/` |
+| **Infrastructure** | `infrastructure/`, `infra/`, `config/`, `db/`, `main.rs` setup code                                 |
 
 **Document the mapping:**
+
 ```markdown
 ## Layer Mapping for This Codebase
 
@@ -114,15 +116,15 @@ grep -rn "^use crate::" src/adapters/ 2>/dev/null
 
 **CRITICAL VIOLATIONS (Red Flags):**
 
-| Violation | Pattern to Find | Severity |
-|-----------|-----------------|----------|
-| Domain imports adapters | `use crate::adapters` in domain/ | CRITICAL |
-| Domain imports infrastructure | `use crate::infrastructure` in domain/ | CRITICAL |
-| Domain imports application | `use crate::application` in domain/ | CRITICAL |
-| Application imports adapters | `use crate::adapters` in application/ | HIGH |
-| Application imports infrastructure | `use crate::infrastructure` in application/ | HIGH |
-| Domain depends on web framework | `use axum`, `use actix`, `use rocket` in domain/ | CRITICAL |
-| Domain depends on DB | `use sqlx`, `use diesel`, `use sea_orm` in domain/ | CRITICAL |
+| Violation                          | Pattern to Find                                    | Severity |
+| ---------------------------------- | -------------------------------------------------- | -------- |
+| Domain imports adapters            | `use crate::adapters` in domain/                   | CRITICAL |
+| Domain imports infrastructure      | `use crate::infrastructure` in domain/             | CRITICAL |
+| Domain imports application         | `use crate::application` in domain/                | CRITICAL |
+| Application imports adapters       | `use crate::adapters` in application/              | HIGH     |
+| Application imports infrastructure | `use crate::infrastructure` in application/        | HIGH     |
+| Domain depends on web framework    | `use axum`, `use actix`, `use rocket` in domain/   | CRITICAL |
+| Domain depends on DB               | `use sqlx`, `use diesel`, `use sea_orm` in domain/ | CRITICAL |
 
 ### 2.3 Cargo.toml Analysis
 
@@ -137,6 +139,7 @@ grep -A5 "\[features\]" Cargo.toml
 ```
 
 **Ideal Dependency Separation:**
+
 - Domain crate: Only `uuid`, `chrono`, `thiserror` (minimal)
 - Application crate: Domain + `async-trait`
 - Adapters crate: Application + framework deps (`axum`, `sqlx`, `serde`)
@@ -163,13 +166,13 @@ grep -rn "impl.*for" src/adapters/ 2>/dev/null
 
 ### 3.2 Port Compliance Checklist
 
-| Criteria | Status | Notes |
-|----------|--------|-------|
-| Repository traits defined in application layer | | |
-| External service traits defined in application layer | | |
-| Adapters implement application-layer traits | | |
-| Use cases depend on trait objects, not concrete types | | |
-| Dependency injection via constructor | | |
+| Criteria                                              | Status | Notes |
+| ----------------------------------------------------- | ------ | ----- |
+| Repository traits defined in application layer        |        |       |
+| External service traits defined in application layer  |        |       |
+| Adapters implement application-layer traits           |        |       |
+| Use cases depend on trait objects, not concrete types |        |       |
+| Dependency injection via constructor                  |        |       |
 
 ### 3.3 Anti-Pattern Detection
 
@@ -188,6 +191,7 @@ pub struct RegisterUser {
 ```
 
 **Search for violations:**
+
 ```bash
 # Look for concrete DB types in use cases
 grep -rn "Postgres\|Mysql\|Sqlite\|Pool" src/application/ 2>/dev/null
@@ -214,20 +218,22 @@ grep -rn "#\[derive" src/domain/ 2>/dev/null
 
 ### 4.2 Domain Purity Checklist
 
-| Criteria | Status | Notes |
-|----------|--------|-------|
-| Entities have no framework dependencies | | |
-| Entities encapsulate business rules | | |
-| Value objects are immutable | | |
-| Domain services contain cross-entity logic | | |
-| No serialization concerns in domain | | |
+| Criteria                                   | Status | Notes |
+| ------------------------------------------ | ------ | ----- |
+| Entities have no framework dependencies    |        |       |
+| Entities encapsulate business rules        |        |       |
+| Value objects are immutable                |        |       |
+| Domain services contain cross-entity logic |        |       |
+| No serialization concerns in domain        |        |       |
 
 **Acceptable Domain Derives:**
+
 ```rust
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]  // OK
 ```
 
 **Problematic Domain Derives:**
+
 ```rust
 #[derive(Serialize, Deserialize)]  // BAD: Serialization is adapter concern
 #[derive(sqlx::FromRow)]           // BAD: DB concern
@@ -244,11 +250,13 @@ grep -rn "if.*&&\|match\|fn.*validate\|fn.*calculate" src/adapters/ 2>/dev/null
 ```
 
 **Business logic should be in:**
+
 - Domain entities (entity-specific rules)
 - Domain services (cross-entity rules)
 - Application use cases (orchestration)
 
 **NOT in:**
+
 - HTTP handlers
 - Database repositories
 - Serializers/deserializers
@@ -266,13 +274,13 @@ grep -rn "pub struct.*UseCase\|pub struct.*Service\|pub async fn execute" src/ap
 
 ### 5.2 Use Case Checklist
 
-| Criteria | Status | Notes |
-|----------|--------|-------|
-| Use cases are single-purpose | | |
-| Use cases accept trait dependencies | | |
-| Use cases return domain types or app errors | | |
-| No HTTP/serialization concerns in use cases | | |
-| Use cases are testable in isolation | | |
+| Criteria                                    | Status | Notes |
+| ------------------------------------------- | ------ | ----- |
+| Use cases are single-purpose                |        |       |
+| Use cases accept trait dependencies         |        |       |
+| Use cases return domain types or app errors |        |       |
+| No HTTP/serialization concerns in use cases |        |       |
+| Use cases are testable in isolation         |        |       |
 
 ### 5.3 Use Case Anti-Patterns
 
@@ -297,13 +305,14 @@ grep -rn "enum.*Error\|struct.*Error" src/ | grep -v target/
 
 ### 6.2 Error Layering Checklist
 
-| Layer | Error Type | Converts To |
-|-------|-----------|-------------|
-| Domain | `DomainError` | - |
-| Application | `AppError` | Contains domain errors |
-| Adapters | `AdapterError` → HTTP Status | Converts from AppError |
+| Layer       | Error Type                   | Converts To            |
+| ----------- | ---------------------------- | ---------------------- |
+| Domain      | `DomainError`                | -                      |
+| Application | `AppError`                   | Contains domain errors |
+| Adapters    | `AdapterError` → HTTP Status | Converts from AppError |
 
 **Check for proper error conversion:**
+
 ```bash
 # Look for From implementations
 grep -rn "impl From<.*Error>" src/
@@ -315,7 +324,7 @@ grep -rn "impl From<.*Error>" src/
 
 ### 7.1 Report Template
 
-```markdown
+````markdown
 # Clean Architecture Audit Report
 
 **Project:** [Name]
@@ -331,19 +340,21 @@ grep -rn "impl From<.*Error>" src/
 
 ## Layer Mapping
 
-| Layer | Directory | Compliance |
-|-------|-----------|------------|
-| Domain | `src/???` | |
-| Application | `src/???` | |
-| Adapters | `src/???` | |
-| Infrastructure | `src/???` | |
+| Layer          | Directory | Compliance |
+| -------------- | --------- | ---------- |
+| Domain         | `src/???` |            |
+| Application    | `src/???` |            |
+| Adapters       | `src/???` |            |
+| Infrastructure | `src/???` |            |
 
 ## Dependency Violations
 
 ### Critical
+
 1. [File:Line] - [Description]
 
 ### High Priority
+
 1. [File:Line] - [Description]
 
 ## Port/Adapter Issues
@@ -357,26 +368,33 @@ grep -rn "impl From<.*Error>" src/
 ## Recommendations
 
 ### Immediate Actions
+
 1. [Action]
 
 ### Short-term Improvements
+
 1. [Action]
 
 ### Long-term Refactoring
+
 1. [Action]
 
 ## Code Examples
 
 ### Current (Anti-pattern)
+
 ```rust
 // problematic code
 ```
+````
 
 ### Recommended
+
 ```rust
 // improved code
 ```
-```
+
+````
 
 ---
 
@@ -405,4 +423,4 @@ grep -rn "impl From<.*Error>" src/
 /rust:audit-clean-arch --focus dependencies
 /rust:audit-clean-arch --focus ports
 /rust:audit-clean-arch --focus domain-purity
-```
+````
